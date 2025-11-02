@@ -1,30 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Book, BookDocument } from './schemas/book.schema';
+import { Book } from './schemas/book.schema';
 
 @Injectable()
 export class BooksService {
-  constructor(@InjectModel(Book.name) private bookModel: Model<BookDocument>) {}
+  constructor(@InjectModel(Book.name) private readonly bookModel: Model<Book>) {}
 
-  create(data: any) {
+  async create(data: any) {
     const createdBook = new this.bookModel(data);
     return createdBook.save();
   }
 
-  findAll() {
-    return this.bookModel.find().exec();
+  async findAll() {
+    return this.bookModel.find().populate('author').populate('category').exec();
   }
 
-  findOne(id: string) {
-    return this.bookModel.findById(id).exec();
+  async findOne(id: string) {
+    return this.bookModel.findById(id).populate('author').populate('category').exec();
   }
 
-  update(id: string, data: any) {
+  async update(id: string, data: any) {
     return this.bookModel.findByIdAndUpdate(id, data, { new: true }).exec();
   }
 
-  remove(id: string) {
+  async remove(id: string) {
     return this.bookModel.findByIdAndDelete(id).exec();
   }
 }

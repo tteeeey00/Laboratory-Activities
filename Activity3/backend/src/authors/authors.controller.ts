@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 
 @Controller('authors')
@@ -20,7 +20,7 @@ export class AuthorsController {
     return this.authorsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() data: any) {
     return this.authorsService.update(id, data);
   }
